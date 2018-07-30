@@ -7,6 +7,7 @@ import argparse
 import json
 import os
 import sys
+from GoogleDrive import GoogleDrive
 
 
 class GoogleSheet(object):
@@ -15,24 +16,18 @@ class GoogleSheet(object):
         self.result_title = result_title
         self.titles = titles
 
-        self.result = None
         self.result_sheetId = None
-        self.service = self.get_service()
-        self.sheet_list = self.get_sheets(self.template_id)
-
-        #self.create_result_sheet()
+        self.service = self.get_sheet_service()
+        self.drive = GoogleDrive()
 
 
-    def get_resultsheet(self):
-        return self.result
-
-
-    def get_resultId(self):
+    #Returns ID of result spreadsheet
+    def get_resultsheetId(self):
         return self.result_sheetId
 
 
     #Create credentials to access Googlesheets
-    def get_credentials(self):
+    def get_sheet_credentials(self):
         SCOPES = 'https://www.googleapis.com/auth/drive'
         CLIENT_SECRET_FILE = 'client_secret.json'
         APPLICATION_NAME = 'ovs-offload-results'
@@ -48,15 +43,15 @@ class GoogleSheet(object):
 
 
     #Create a service to access Googlesheets
-    def get_service(self):
-        creds = self.get_credentials()
+    def get_sheet_service(self):
+        creds = self.get_sheet_credentials()
         service = build('sheets', 'v4', http=creds.authorize(Http()))
         return service
 
 
     #Returns Id of a Spreadsheet
-    def get_spreadsheet_id(self, s):
-        return s['spreadsheetId']
+    def get_spreadsheet_id(self, spreadsheet):
+        return spreadsheet['spreadsheetId']
 
 
     #Returns Spreadsheet from Id
@@ -75,13 +70,21 @@ class GoogleSheet(object):
         return sheets
 
 
+    def get_resultsheet(self):
+        present =  self.drive.search_spreadsheet_by_title(self.result_title)
+        if not present:
+            self.create_result_sheet()
+        else:
+            self.result_sheetId = present
+        return self.result_sheetId
+
+
     #Create Result Sheet
     def create_result_sheet(self):
         self.create_sheet(self.result_title)
         self.make_copy(self.template_id, self.result_sheetId)
         self.update_titles()
         return self.result_sheetId
-        #return self.result_sheetId
 
 
     #Returns Google drive link of result sheet
@@ -100,8 +103,7 @@ class GoogleSheet(object):
         }
 
         sheet =  self.service.spreadsheets().create(body = spreadsheet_body).execute()
-        self.result = sheet
-        self.result_sheetId = self.get_spreadsheet_id(self.result)
+        self.result_sheetId = self.get_spreadsheet_id(sheet)
 
 
     #Copy One Spreadsheet to another
@@ -110,7 +112,8 @@ class GoogleSheet(object):
             'destination_spreadsheet_id' : destinationId,
         }
 
-        for sheet in self.sheet_list:
+        sheet_list = self.get_sheets(self.template_id)
+        for sheet in sheet_list:
             new_sheet = self.service.spreadsheets().sheets().copyTo(spreadsheetId=sourceId,
                                                body=spreadsheet_body, sheetId=sheet).execute()
 
@@ -160,6 +163,8 @@ class GoogleSheet(object):
         self.service.spreadsheets().batchUpdate(spreadsheetId=spreadsheetId,
                                                 body=sheet_body).execute()
 
+
+    #Add data column-wise
     def update_columns(self, spreadsheetId, data, range_name):
         body = {
             'majorDimension': "COLUMNS",
@@ -173,6 +178,7 @@ class GoogleSheet(object):
             valueInputOption="USER_ENTERED", body=body).execute()
 
 
+    #Add data row-wise
     def update_rows(self, spreadsheetId, data, range_name):
         body = {
             'majorDimension': "ROWS",
@@ -185,31 +191,3 @@ class GoogleSheet(object):
             spreadsheetId=spreadsheetId, range=range_name,
             valueInputOption="USER_ENTERED", body=body).execute()
 
-
-
-
-
-"""
-
-def main():
-    template_id = "1rDR9ozngEWZzFV9OYAG3VVmDEzFRb1Hrk14VmW9btE0"
-    sheet_titles = ['Versions and Setup data','Topologies','Offload Disabled','Offload Enabled']
-    result_sheet_title = "New_result"
-    sheet = GoogleSheet(template_id, sheet_titles)
-    sheet.create_result_sheet(result_sheet_title)
-    #result_sheet = sheet.create_sheet(result_sheet_title)
-    #result_sheet_id = result_sheet['spreadsheetId']
-    #sheet.make_copy(template_id, result_sheet_id)
-    #sheet.update_titles()
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='OVSQE Results to Google sheets')
-    parser.add_argument('--template', nargs=1, type=str, help='ID of a result sheet template', required=True)
-    parser.add_argument('--result', nargs=1, type=str, help='Name of the result sheet', required=True)
-    parser.add_argument('--titles', nargs='+', type=str, help='List of sheet titles in result spreadsheet', required=True)
-
-    args = parser.parse_args()
-    SHEETS = GoogleSheet(args)
-
-"""

@@ -8,6 +8,7 @@ import json
 import os
 import sys
 from GoogleSheet import GoogleSheet
+from GoogleDrive import GoogleDrive
 
 class OffloadResult(object):
     def __init__(self, args):
@@ -20,8 +21,12 @@ class OffloadResult(object):
         self.titles = ['Versions and Setup data','Topologies','Offload Disabled','Offload Enabled']
 
         self.gsheet = GoogleSheet(self.template, self.result, self.titles)
-        self.gsheet.create_result_sheet()
-        self.resultsheetId = self.gsheet.get_resultId()
+        #self. = GoogleDrive().search_spreadsheet_by_title(self.result)
+
+        self.resultsheetId = self.gsheet.get_resultsheet()
+
+        # self.gsheet.create_result_sheet()
+        #self.resultsheetId = self.gsheet.get_resultsheetId()
         self.update_resultsheet(self.resultsheetId, self.topo, self.ovs, self.data_list)
 
 
