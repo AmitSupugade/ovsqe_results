@@ -14,24 +14,26 @@ class OffloadResult(object):
     def __init__(self, args):
         self.result = args.result[0]
         self.topo = str(args.topo[0])
+        self.driver = str(args.driver[0])
         self.ovs = str(args.ovs[0])
         self.data_list = [args.data[10 * i:10 * (i + 1)] for i in range(int(len(args.data) / 10))]
 
-        self.template = "1rDR9ozngEWZzFV9OYAG3VVmDEzFRb1Hrk14VmW9btE0"
-        self.titles = ['Versions and Setup data','Topologies','Offload Disabled','Offload Enabled']
+        #Template for per driver result upload
+        #self.template = "1rDR9ozngEWZzFV9OYAG3VVmDEzFRb1Hrk14VmW9btE0"
+        #self.titles = ['Versions and Setup data', 'Topologies', 'Offload Disabled', 'Offload Enabled']
+
+        #Template for combined result upload
+        self.template = "1CcYBMjEul1GyrTSYvUvCAuqBoi7Dd66Lqk1_PltrnHA"
+        self.titles = ['Versions and Setup data', 'Topologies', 'Mellanox Offload Disabled', 'Mellanox Offload Enabled', 'Netronome Offload Disabled', 'Netronome Offload Enabled']
 
         self.gsheet = GoogleSheet(self.template, self.result, self.titles)
-        #self. = GoogleDrive().search_spreadsheet_by_title(self.result)
-
         self.resultsheetId = self.gsheet.get_resultsheet()
 
-        # self.gsheet.create_result_sheet()
-        #self.resultsheetId = self.gsheet.get_resultsheetId()
-        self.update_resultsheet(self.resultsheetId, self.topo, self.ovs, self.data_list)
+        self.update_offload_resultsheet(self.resultsheetId, self.driver, self.topo, self.ovs, self.data_list)
 
 
     #Update results in Resultsheet
-    def update_resultsheet(self, spreadsheetId, topo, ovs, data_list):
+    def update_offload_resultsheet(self, spreadsheetId, driver, topo, ovs, data_list):
         self.update_ovs_version(spreadsheetId, ovs)
 
         for data in data_list:
@@ -42,19 +44,20 @@ class OffloadResult(object):
             disabled_throughput = [data[6]]
             disabled_latency = [data[8], data[9], data[7]]
 
+            sheets_to_use = self.get_resultsheet_titles(driver)
             throughput_range = self.get_throughput_cell(topo, frame, flows)
             latency_range = self.get_latency_cell(topo, frame, flows)
 
-            enabled_throughput_range = "Offload Enabled!" + throughput_range
+            enabled_throughput_range = sheets_to_use[0] + "!" + throughput_range
             self.update_throughput(spreadsheetId, enabled_throughput, enabled_throughput_range)
 
-            enabled_latency_range = "Offload Enabled!" + latency_range
+            enabled_latency_range = sheets_to_use[0] + "!"  + latency_range
             self.update_latency(spreadsheetId, enabled_latency, enabled_latency_range)
 
-            disabled_throughput_range = "Offload Disabled!" + throughput_range
+            disabled_throughput_range = sheets_to_use[1] + "!"  + throughput_range
             self.update_throughput(spreadsheetId, disabled_throughput, disabled_throughput_range)
 
-            disabled_latency_range = "Offload Disabled!" + latency_range
+            disabled_latency_range = sheets_to_use[1] + "!"  + latency_range
             self.update_latency(spreadsheetId, disabled_latency, disabled_latency_range)
 
         print("Results updated to google sheet: {}".format(self.gsheet.get_sheet_link(spreadsheetId)))
@@ -74,6 +77,16 @@ class OffloadResult(object):
     def update_ovs_version(self, spreadsheetId, ovs_version):
         data = [ovs_version]
         self.gsheet.update_columns(spreadsheetId, data, "Versions and Setup data!A2")
+
+
+    def get_resultsheet_titles(self, driver):
+        if driver == "nfp":
+            titles = [ "Netronome Offload Enabled", "Netronome Offload Disabled"]
+        elif driver == "mlx5_core":
+            titles = [ "Mellanox Offload Enabled", "Mellanox Offload Disabled"]
+        else:
+            titles = ["Offload Enabled", "Offload Disabled"]
+        return titles
 
 
     #Get Latency range
@@ -152,6 +165,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='OVS OFFLOAD Results to Google sheets')
     parser.add_argument('--result', nargs=1, type=str, help='Name of the result sheet', required=True)
     parser.add_argument('--ovs', nargs=1, type=str, help='OVS Version', required=True)
+    parser.add_argument('--driver', nargs=1, type=str, help='NIC Driver. Ex: npf, mlx5_core', required=True)
     parser.add_argument('--topo', nargs=1, type=str, help='Test Topology. Available options: 1pf2vf, 1pf1vf', required=True)
     parser.add_argument('--data', nargs='+', type=str, help='List of result data', required=True)
 
