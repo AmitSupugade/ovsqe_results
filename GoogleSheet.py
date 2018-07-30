@@ -80,8 +80,7 @@ class GoogleSheet(object):
         self.create_sheet(self.result_title)
         self.make_copy(self.template_id, self.result_sheetId)
         self.update_titles()
-        print("Link to Result Sheet: {}".format(self.get_sheet_link(self.result_sheetId)))
-        return self.result
+        return self.result_sheetId
         #return self.result_sheetId
 
 
@@ -101,7 +100,6 @@ class GoogleSheet(object):
         }
 
         sheet =  self.service.spreadsheets().create(body = spreadsheet_body).execute()
-        print("New Sheet Created!")
         self.result = sheet
         self.result_sheetId = self.get_spreadsheet_id(self.result)
 

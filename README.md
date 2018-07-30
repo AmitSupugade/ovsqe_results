@@ -2,10 +2,11 @@
 api to import OVSQE test results to google sheets
 
 ## How to use
-TO_DO
 
-## Example
-TO_DO
+#### To upload OVS OFFLOAD results
+```
+python OffloadResult.py --result "Test Result upload" --ovs "openvswitch-2.9.0-56.el7fdp.x86_64" --topo "1pf2vf" --data "${results[@]}"
+```
 
 ## Setup script
 ```
