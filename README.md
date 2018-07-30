@@ -1,13 +1,13 @@
 # ovsqe_results
 api to import OVSQE test results to google sheets
 
-#How to use
+## How to use
 TO_DO
 
-#Example
+## Example
 TO_DO
 
-#Setup script
+## Setup script
 ```
 cat <<'EOT' >> /etc/yum.repos.d/python34.repo
 [centos-sclo-rh]
