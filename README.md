@@ -1,10 +1,12 @@
 # ovsqe_results
 api to import OVSQE test results to google sheets
+GoogleSheets.py script does basic operations on google sheets such as create, delete, add data etc.
 
-## How to use
-
+## Examples
 #### To upload OVS OFFLOAD results
 ```
+result=()
+results+=(64 1 164888 22.90 18.80 24.20 164999 33.90 28.80 344.20)
 python OffloadResult.py --result "Test Result upload" --ovs "openvswitch-2.9.0-56.el7fdp.x86_64" --topo "1pf2vf" --data "${results[@]}"
 ```
 
