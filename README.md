@@ -1,6 +1,22 @@
 # ovsqe_results
-api to import OVSQE test results to google sheets
-GoogleSheets.py script does basic operations on google sheets such as create, delete, add data etc.
+- API to import OVSQE test results to google sheets
+
+- 'GoogleSheet' class can be used to create, delete, modify, add data to google sheet.
+
+- 'GoogleDrive' class can be used to search spreadsheet in google drive by its name.
+
+- 'OffloadResults' can be used to upload results of ovs offload tests to google sheets. It checks to see if result sheet exists in google drive, if exists, it will update results in that sheet if not, it will create new sheet and update results in that sheet.
+
+- You need to write script similar to OffloadResults.py as per your need to upload test results in Google sheet.
+
+# How to use
+- Run setup script below
+
+- clone this api repository and cd to the repository
+
+- Download 'client_secret.json' and 'token.json' files from netqe infra server in bos lab
+
+- Run script to import results
 
 ## Examples
 #### To upload OVS OFFLOAD results
