@@ -25,8 +25,9 @@ class OffloadResult(object):
         #Template for combined result upload
         self.template = "1CcYBMjEul1GyrTSYvUvCAuqBoi7Dd66Lqk1_PltrnHA"
         self.titles = ['Versions and Setup data', 'Topologies', 'Mellanox Offload Disabled', 'Mellanox Offload Enabled', 'Netronome Offload Disabled', 'Netronome Offload Enabled']
+        self.folder = "1RmYacOMVhIge_zOlVCPWPonZqRKMl8Fo"
 
-        self.gsheet = GoogleSheet(self.template, self.result, self.titles)
+        self.gsheet = GoogleSheet(self.template, self.result, self.titles, self.folder)
         self.resultsheetId = self.gsheet.get_resultsheet()
 
         self.update_offload_resultsheet(self.resultsheetId, self.driver, self.topo, self.ovs, self.data_list)
