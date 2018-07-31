@@ -49,9 +49,6 @@ class GoogleSheet(object):
         return service
 
 
-    #Returns Id of a Spreadsheet
-    def get_spreadsheet_id(self, spreadsheet):
-        return spreadsheet['spreadsheetId']
 
 
     #Returns Spreadsheet from Id
@@ -93,17 +90,9 @@ class GoogleSheet(object):
 
 
     #Create a New Empty Spreadsheet
-    def create_sheet(self, title):
-        spreadsheet_body = {
-          "properties" : {
-            "title" : title,
-            "locale" : 'en',
-            "autoRecalc": 'ON_CHANGE'
-          },
-        }
 
-        sheet =  self.service.spreadsheets().create(body = spreadsheet_body).execute()
-        self.result_sheetId = self.get_spreadsheet_id(sheet)
+    def create_sheet(self, title):
+        self.result_sheetId =  self.drive.create_offload_result_sheet(title)
 
 
     #Copy One Spreadsheet to another
@@ -191,3 +180,22 @@ class GoogleSheet(object):
             spreadsheetId=spreadsheetId, range=range_name,
             valueInputOption="USER_ENTERED", body=body).execute()
 
+"""
+    #Returns Id of a Spreadsheet
+    def get_spreadsheet_id(self, spreadsheet):
+        return spreadsheet['spreadsheetId']
+
+
+    def create_sheet(self, title):
+        spreadsheet_body = {
+          "properties" : {
+            "title" : title,
+            "locale" : 'en',
+            "autoRecalc": 'ON_CHANGE'
+          },
+        }
+
+        sheet =  self.service.spreadsheets().create(body = spreadsheet_body).execute()
+        self.result_sheetId = self.get_spreadsheet_id(sheet)
+
+"""

@@ -41,3 +41,12 @@ class GoogleDrive(object):
         if len(items) == 1:
             return items[0]['id']
         return ''
+
+    def create_offload_result_sheet(self, title):
+        body = {
+            'name': title,
+            'mimeType': 'application/vnd.google-apps.spreadsheet',
+            'parents': ["1RmYacOMVhIge_zOlVCPWPonZqRKMl8Fo"]
+        }
+        self.service.files().create(body=body).execute()
+        return self.search_spreadsheet_by_title(title)
