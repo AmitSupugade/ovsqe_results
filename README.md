@@ -14,7 +14,7 @@
 
 - clone this api repository and cd to the repository
 
-- Download 'client_secret.json' and 'token.json' files from netqe infra server in bos lab
+- Download ['client_secret.json'](http://netqe-infra01.knqe.lab.eng.bos.redhat.com/ovs_offload/client_secret.json) and ['token.json'](http://netqe-infra01.knqe.lab.eng.bos.redhat.com/ovs_offload/token.json) files from netqe infra server in bos lab
 
 - Run script to import results
 
