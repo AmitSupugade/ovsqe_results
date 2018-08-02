@@ -13,6 +13,7 @@ class GoogleDrive(object):
     def __init__(self):
         self.service = self.get_drive_service()
 
+
    #Create credentials to access Google drive
     def get_drive_credentials(self):
         SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly'
@@ -28,6 +29,7 @@ class GoogleDrive(object):
 
         return creds
 
+
     #Create a service to access Google drive
     def get_drive_service(self):
         creds = self.get_drive_credentials()
@@ -35,18 +37,31 @@ class GoogleDrive(object):
         return service
 
 
-    def search_spreadsheet_by_title(self, title):
-        results = self.service.files().list(q="name contains '" + title + "' and mimeType = 'application/vnd.google-apps.spreadsheet'").execute()
+    #Search sheet in given folder by title
+    def search_spreadsheet_by_title(self, title, folder):
+        results = self.service.files().list(
+            q="name = '" + title + "' and mimeType = 'application/vnd.google-apps.spreadsheet' and '" + folder + "' in parents and trashed = False").execute()
+
         items = results.get('files', [])
-        if len(items) == 1:
+        if len(items) != 0:
             return items[0]['id']
         return ''
 
+
+    #Create new Empty sheet in given folder with given title
     def create_result_sheet(self, title, folder):
         body = {
             'name': title,
             'mimeType': 'application/vnd.google-apps.spreadsheet',
             'parents': [folder]
         }
-        self.service.files().create(body=body).execute()
-        return self.search_spreadsheet_by_title(title)
+        new_sheet = self.service.files().create(body=body).execute()
+        return new_sheet['id']
+
+
+
+
+
+#drive = GoogleDrive()
+
+

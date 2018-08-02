@@ -11,15 +11,16 @@ from GoogleDrive import GoogleDrive
 
 
 class GoogleSheet(object):
-    def __init__(self, template_id, result_title, titles, folder=''):
+    def __init__(self, template_id, titles, title, folder=''):
         self.template_id = template_id
-        self.result_title = result_title
         self.titles = titles
         self.folder = folder
+        self.title = title
 
         self.result_sheetId = None
         self.service = self.get_sheet_service()
         self.drive = GoogleDrive()
+        self.count = 0
 
 
     #Create credentials to access Googlesheets
@@ -77,29 +78,47 @@ class GoogleSheet(object):
 
 
     #Search for given sheet title, if doesnt exist create new sheet
-    def get_resultsheet(self):
-        present =  self.drive.search_spreadsheet_by_title(self.result_title)
+    def get_resultsheet(self, testcell, new_title):
+        present =  self.drive.search_spreadsheet_by_title(new_title, self.folder)
         if not present:
-            self.create_result_sheet()
+            #print("Sheet not present")
+            self.result_sheetId = self.create_result_sheet(new_title)
         else:
-            self.result_sheetId = present
+            if not self.check_testcell(present, testcell):
+                #print("Cell Empty")
+                self.result_sheetId = present
+            else:
+                #print("Cell not Empty")
+                self.count += 1
+                new_title = self.title + "_" + str(self.count)
+                self.result_sheetId = self.get_resultsheet(testcell, new_title)
+        self.count = 0
         return self.result_sheetId
+
+
+    #Returns False if cell is Empty
+    def check_testcell(self, spreadsheetId, testcell):
+        celldata = self.service.spreadsheets().values().get(spreadsheetId=spreadsheetId, range=testcell).execute()
+        if len(celldata) == 3:
+            return True
+        return False
 
 
     #Create Result Sheet
-    def create_result_sheet(self):
-        self.create_new_sheet(self.result_title, self.folder)
-        self.make_copy(self.template_id, self.result_sheetId)
-        self.update_titles()
-        return self.result_sheetId
+    def create_result_sheet(self, title):
+        resultsheetId = self.create_new_sheet(title, self.folder)
+        self.make_copy(self.template_id, resultsheetId)
+        self.update_titles(resultsheetId)
+        return resultsheetId
 
 
     #Create new empty sheet
     def create_new_sheet(self, title, folder):
         if not folder:
-            self.create_sheet(title)
+            resultsheetId = self.create_sheet(title)
         else:
-            self.create_sheet_in_folder(title, folder)
+            resultsheetId = self.create_sheet_in_folder(title, folder)
+        return resultsheetId
 
 
     #Create Empty Spreadsheet
@@ -113,12 +132,12 @@ class GoogleSheet(object):
         }
 
         sheet =  self.service.spreadsheets().create(body = spreadsheet_body).execute()
-        self.result_sheetId = self.get_spreadsheet_id(sheet)
+        return self.get_spreadsheet_id(sheet)
 
 
     #Create a New Empty Spreadsheet in given folder
     def create_sheet_in_folder(self, title, folder):
-        self.result_sheetId =  self.drive.create_result_sheet(title, folder)
+        return self.drive.create_result_sheet(title, folder)
 
 
     #Copy One Spreadsheet to another
@@ -128,19 +147,20 @@ class GoogleSheet(object):
         }
 
         sheet_list = self.get_sheets(self.template_id)
+
         for sheet in sheet_list:
             new_sheet = self.service.spreadsheets().sheets().copyTo(spreadsheetId=sourceId,
                                                body=spreadsheet_body, sheetId=sheet).execute()
 
-        result_sheets = self.get_sheets(self.result_sheetId)
+        result_sheets = self.get_sheets(destinationId)
 
         if len(result_sheets) > 1:
-            self.delete_sheet(self.result_sheetId, result_sheets[0])
+            self.delete_sheet(destinationId, result_sheets[0])
 
 
     #Update titles of sheets
-    def update_titles(self):
-        result_sheets = self.get_sheets(self.result_sheetId)
+    def update_titles(self, resultsheetId):
+        result_sheets = self.get_sheets(resultsheetId)
 
         for i in range(len(self.titles)):
             title = self.titles[i]
@@ -159,7 +179,7 @@ class GoogleSheet(object):
                 ]
             }
 
-            self.service.spreadsheets().batchUpdate(spreadsheetId=self.result_sheetId,
+            self.service.spreadsheets().batchUpdate(spreadsheetId=resultsheetId,
                                                     body=sheet_body).execute()
 
 
@@ -206,3 +226,15 @@ class GoogleSheet(object):
             spreadsheetId=spreadsheetId, range=range_name,
             valueInputOption="USER_ENTERED", body=body).execute()
 
+
+"""
+    #Search for given sheet title, if doesnt exist create new sheet
+    def get_resultsheet(self, testcell, title):
+        present =  self.drive.search_spreadsheet_by_title(title)
+        if not present:
+            self.create_result_sheet(title)
+        else:
+            self.result_sheetId = present
+        return self.result_sheetId
+
+"""

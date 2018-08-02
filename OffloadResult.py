@@ -27,8 +27,10 @@ class OffloadResult(object):
         self.titles = ['Versions and Setup data', 'Topologies', 'Mellanox Offload Disabled', 'Mellanox Offload Enabled', 'Netronome Offload Disabled', 'Netronome Offload Enabled']
         self.folder = "1RmYacOMVhIge_zOlVCPWPonZqRKMl8Fo"
 
-        self.gsheet = GoogleSheet(self.template, self.result, self.titles, self.folder)
-        self.resultsheetId = self.gsheet.get_resultsheet()
+        self.gsheet = GoogleSheet(self.template, self.titles, self.result, self.folder)
+        testcell = self.get_test_cell(self.driver, self.topo)
+
+        self.resultsheetId = self.gsheet.get_resultsheet(testcell, self.result)
 
         self.update_offload_resultsheet(self.resultsheetId, self.driver, self.topo, self.ovs, self.data_list)
 
@@ -78,6 +80,25 @@ class OffloadResult(object):
     def update_ovs_version(self, spreadsheetId, ovs_version):
         data = [ovs_version]
         self.gsheet.update_columns(spreadsheetId, data, "Versions and Setup data!A2")
+
+
+    def get_test_cell(self, driver, topo):
+        if driver =="nfp":
+            if topo == "1pf2vf":
+                return "Netronome Offload Enabled!B3"
+            elif topo == "1pf1vf":
+                return "Netronome Offload Enabled!B27"
+            else:
+                return ''
+        elif driver == "mlx5_core":
+            if topo == "1pf2vf":
+                return "Mellanox Offload Enabled!B3"
+            elif topo == "1pf1vf":
+                return "Mellanox Offload Enabled!B27"
+            else:
+                return ''
+        else:
+            return ''
 
 
     def get_resultsheet_titles(self, driver):
