@@ -7,7 +7,7 @@
 
 - 'OffloadResults' can be used to upload results of ovs offload tests to google sheets. It checks to see if result sheet exists in google drive, if exists, it will update results in that sheet if not, it will create new sheet and update results in that sheet.
 
-- You need to write script similar to OffloadResults.py as per your need to upload test results in Google sheet.
+- You need to write script similar to OffloadResults.py as per your need to upload test results in Google sheet. Kindly refer [wiki page](https://github.com/AmitSupugade/ovsqe_results/wiki) for guidelines.
 
 # How to use
 - Run setup script below
