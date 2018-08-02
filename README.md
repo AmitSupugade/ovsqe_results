@@ -47,3 +47,8 @@ scl enable rh-python34 bash
 
 pip install --upgrade google-api-python-client oauth2client
 ```
+
+## Upload your results
+- If you want to use this api to upload your results to Google sheet, you need to write a python script.
+
+- Kindly refer [wiki page](https://github.com/AmitSupugade/ovsqe_results/wiki) for guidelines to write scripts to upload your results
