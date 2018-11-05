@@ -48,7 +48,7 @@ class TcPolicyResult(object):
             disabled_latency = [data[8], data[9], data[7]]
             tc_policy=data[10]
 
-            sheets_to_use = get_sheets_to_use(policy, driver)
+            sheets_to_use = self.get_sheets_to_use(policy, driver)
             throughput_range = self.get_throughput_cell(topo, frame, flows)
             latency_range = self.get_latency_cell(topo, frame, flows)
 
