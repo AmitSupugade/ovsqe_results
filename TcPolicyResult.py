@@ -16,7 +16,7 @@ class TcPolicyResult(object):
         self.topo = str(args.topo[0])
         self.driver = str(args.driver[0])
         self.ovs = str(args.ovs[0])
-        self.data_list = [args.data[10 * i:10 * (i + 1)] for i in range(int(len(args.data) / 10))]
+        self.data_list = [args.data[11 * i:11 * (i + 1)] for i in range(int(len(args.data) / 11))]
 
         #Template for per driver result upload
         #self.template = "1rDR9ozngEWZzFV9OYAG3VVmDEzFRb1Hrk14VmW9btE0"
@@ -46,7 +46,7 @@ class TcPolicyResult(object):
             enabled_latency = [data[4], data[5], data[3]]
             disabled_throughput = [data[6]]
             disabled_latency = [data[8], data[9], data[7]]
-            tc_policy = [data[10]]
+            tc_policy=data[10]
 
             sheets_to_use = get_sheets_to_use(policy, driver)
             throughput_range = self.get_throughput_cell(topo, frame, flows)
