@@ -24,7 +24,7 @@ class OffloadResult(object):
 
         #Template for combined result upload
         self.template = "1CcYBMjEul1GyrTSYvUvCAuqBoi7Dd66Lqk1_PltrnHA"
-        self.titles = ['Versions and Setup data', 'Topologies', 'Mellanox Offload Disabled', 'Mellanox Offload Enabled', 'Netronome Offload Disabled', 'Netronome Offload Enabled']
+        self.titles = ['Versions_and_Setup_data', 'Topologies', 'Mellanox_Offload_Disabled', 'Mellanox_Offload_Enabled', 'Netronome_Offload_Disabled', 'Netronome_Offload_Enabled']
         self.folder = "1RmYacOMVhIge_zOlVCPWPonZqRKMl8Fo"
 
         self.gsheet = GoogleSheet(self.template, self.titles, self.result, self.folder)
@@ -79,22 +79,22 @@ class OffloadResult(object):
     #Update OVS Version in Result sheet
     def update_ovs_version(self, spreadsheetId, ovs_version):
         data = [ovs_version]
-        self.gsheet.update_columns(spreadsheetId, data, "Versions and Setup data!A2")
+        self.gsheet.update_columns(spreadsheetId, data, "Versions_and_Setup_data!A2")
 
 
     def get_test_cell(self, driver, topo):
         if driver =="nfp":
             if topo == "1pf2vf":
-                return "Netronome Offload Enabled!B3"
+                return "Netronome_Offload_Enabled!B3"
             elif topo == "1pf1vf":
-                return "Netronome Offload Enabled!B27"
+                return "Netronome_Offload_Enabled!B27"
             else:
                 return ''
         elif driver == "mlx5_core":
             if topo == "1pf2vf":
-                return "Mellanox Offload Enabled!B3"
+                return "Mellanox_Offload_Enabled!B3"
             elif topo == "1pf1vf":
-                return "Mellanox Offload Enabled!B27"
+                return "Mellanox_Offload_Enabled!B27"
             else:
                 return ''
         else:
@@ -103,11 +103,11 @@ class OffloadResult(object):
 
     def get_resultsheet_titles(self, driver):
         if driver == "nfp":
-            titles = [ "Netronome Offload Enabled", "Netronome Offload Disabled"]
+            titles = [ "Netronome_Offload_Enabled", "Netronome_Offload_Disabled"]
         elif driver == "mlx5_core":
-            titles = [ "Mellanox Offload Enabled", "Mellanox Offload Disabled"]
+            titles = [ "Mellanox_Offload_Enabled", "Mellanox_Offload_Disabled"]
         else:
-            titles = ["Offload Enabled", "Offload Disabled"]
+            titles = ["Offload_Enabled", "Offload_Disabled"]
         return titles
 
 
