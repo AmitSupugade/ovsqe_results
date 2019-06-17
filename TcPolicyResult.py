@@ -80,7 +80,7 @@ class TcPolicyResult(object):
     #Update OVS Version in Result sheet
     def update_ovs_version(self, spreadsheetId, ovs_version):
         data = [ovs_version]
-        self.gsheet.update_columns(spreadsheetId, data, "Versions and Setup data!A2")
+        self.gsheet.update_columns(spreadsheetId, data, "Versions_and_Setup_data!A2")
 
 
     def get_test_cell(self, driver, topo):
