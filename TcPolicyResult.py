@@ -24,7 +24,7 @@ class TcPolicyResult(object):
 
         #Template for combined result upload
         self.template = "1lxiw0oSY08iWIRqWnxJ7rXFY6bOdvRGUXaFPxnDa8wM"
-        self.titles = ['Versions and Setup data', 'Topologies', 'skip_hw Mellanox Offload Disabled', 'skip_sw Mellanox Offload Disabled', 'skip_hw Mellanox Offload Enabled', 'skip_sw Mellanox Offload Enabled', 'skip_hw Netronome Offload Disabled', 'skip_sw Netronome Offload Disabled', 'skip_hw Netronome Offload Enabled', 'skip_sw Netronome Offload Enabled']
+        self.titles = ['Versions_and_Setup_data', 'Topologies', 'skip_hw_Mellanox_Offload_Disabled', 'skip_sw_Mellanox_Offload_Disabled', 'skip_hw_Mellanox_Offload_Enabled', 'skip_sw_Mellanox_Offload_Enabled', 'skip_hw_Netronome_Offload_Disabled', 'skip_sw_Netronome_Offload_Disabled', 'skip_hw_Netronome_Offload_Enabled', 'skip_sw_Netronome_Offload_Enabled']
         self.folder = "109uHIZ7dpNcBfxx8UuZbvwqo3AqtmxGx"
 
         self.gsheet = GoogleSheet(self.template, self.titles, self.result, self.folder)
@@ -86,16 +86,16 @@ class TcPolicyResult(object):
     def get_test_cell(self, driver, topo):
         if driver =="nfp":
             if topo == "1pf2vf":
-                return "skip_hw Netronome Offload Enabled!B3"
+                return "skip_hw_Netronome_Offload_Enabled!B3"
             elif topo == "1pf1vf":
-                return "skip_hw Netronome Offload Enabled!B27"
+                return "skip_hw_Netronome_Offload_Enabled!B27"
             else:
                 return ''
         elif driver == "mlx5_core":
             if topo == "1pf2vf":
-                return "skip_hw Mellanox Offload Enabled!B3"
+                return "skip_hw_Mellanox_Offload_Enabled!B3"
             elif topo == "1pf1vf":
-                return "skip_hw Mellanox Offload Enabled!B27"
+                return "skip_hw_Mellanox_Offload_Enabled!B27"
             else:
                 return ''
         else:
@@ -104,11 +104,11 @@ class TcPolicyResult(object):
 
     def get_resultsheet_titles(self, driver):
         if driver == "nfp":
-            titles = [ "skip_hw Netronome Offload Enabled", "skip_sw Netronome Offload Enabled", "skip_hw Netronome Offload Disabled", "skip_sw Netronome Offload Disabled" ]
+            titles = [ "skip_hw_Netronome_Offload_Enabled", "skip_sw_Netronome_Offload_Enabled", "skip_hw_Netronome_Offload_Disabled", "skip_sw_Netronome_Offload_Disabled" ]
         elif driver == "mlx5_core":
-            titles = [ "skip_hw Mellanox Offload Enabled", "skip_sw Mellanox Offload Enabled", "skip_hw Mellanox Offload Disabled", "skip_sw Mellanox Offload Disabled" ]
+            titles = [ "skip_hw_Mellanox_Offload_Enabled", "skip_sw_Mellanox_Offload_Enabled", "skip_hw_Mellanox_Offload_Disabled", "skip_sw_Mellanox_Offload_Disabled" ]
         else:
-            titles = ["Offload Enabled", "Offload Disabled"]
+            titles = ["Offload_Enabled", "Offload_Disabled"]
         return titles
 
 
