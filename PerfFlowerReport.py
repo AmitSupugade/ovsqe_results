@@ -12,8 +12,8 @@ from GoogleDrive import GoogleDrive
 
 class PerfFlowerReport(object):
     def __init__(self, args):
-        self.dataset_20k = [args.data20k[3 * i:3 * (i + 1)] for i in range(int(len(args.data20k) / 3))]
-        self.dataset_40k = [args.data40k[3 * i:3 * (i + 1)] for i in range(int(len(args.data40k) / 3))]
+        self.dataset_20k = [args.data20k[4 * i:4 * (i + 1)] for i in range(int(len(args.data20k) / 4))]
+        self.dataset_40k = [args.data40k[4 * i:4 * (i + 1)] for i in range(int(len(args.data40k) / 4))]
         self.template = "1PzDCMA65z4J597PXEb3wMQ-e-RxYQhJ2_cGKiyzON1s"
         self.titles = ['Report']
         self.gsheet = GoogleSheet(self.template, self.titles, "Flow Insertion Rate Test Report")
