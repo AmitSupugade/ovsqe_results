@@ -14,9 +14,10 @@ class PerfFlowerReport(object):
     def __init__(self, args):
         self.dataset_20k = [args.data20k[3 * i:3 * (i + 1)] for i in range(int(len(args.data20k) / 3))]
         self.dataset_40k = [args.data40k[3 * i:3 * (i + 1)] for i in range(int(len(args.data40k) / 3))]
-        self.sheet = "1PzDCMA65z4J597PXEb3wMQ-e-RxYQhJ2_cGKiyzON1s"
+        self.template = "1PzDCMA65z4J597PXEb3wMQ-e-RxYQhJ2_cGKiyzON1s"
         self.titles = ['Report']
-        self.cells=['K', 'J', 'I', 'H', 'G', 'F', 'E', 'D', 'C', 'B']
+        self.gsheet = GoogleSheet(self.template, self.titles, "Flow Insertion Rate Test Report")
+	self.cells=['K', 'J', 'I', 'H', 'G', 'F', 'E', 'D', 'C', 'B']
 
         self.upload_data()
 
@@ -25,11 +26,11 @@ class PerfFlowerReport(object):
             column = self.cells[i]
             range_20k = 'Report!' + column + '3:' + column + '6'
             data_20k = self.dataset_20k[i]
-            self.gsheet.update_columns(self.sheet, data_20k, range_20k)
+            self.gsheet.update_columns(self.template, data_20k, range_20k)
 
             range_40k = 'Report!' + column + '9:' + column + '12'
             data_40k = self.dataset_40k[i]
-            self.gsheet.update_columns(self.sheet, data_40k, range_40k)
+            self.gsheet.update_columns(self.template, data_40k, range_40k)
 
 
 if __name__ == "__main__":
