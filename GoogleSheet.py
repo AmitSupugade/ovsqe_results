@@ -227,6 +227,37 @@ class GoogleSheet(object):
             valueInputOption="USER_ENTERED", body=body).execute()
 
 
+    #Get Data from cells row-wise
+    def get_row_data(self, spreadsheetId, range_name):
+        return self.service.spreadsheets().values().get(spreadsheetId=spreadsheetId,
+	    range=range_name, majorDimension="ROWS").execute()['values']
+
+
+    #Get Data from cells column-wise
+    def get_column_data(self, spreadsheetId, range_name):
+        return self.service.spreadsheets().values().get(spreadsheetId=spreadsheetId,
+	    range=range_name, majorDimension="COLUMNS").execute()['values']
+
+
+    #Get Batch Data
+    def get_batch_data(self, spreadsheetId, ranges):
+        return self.service.spreadsheets().values().batchGet(spreadsheetId=spreadsheetId,
+	    ranges=ranges, majorDimension="ROWS").execute()
+
+    #Update Batch Data
+    def update_batch_data(self, spreadsheetId, range, data):
+        body = {
+            "valueInputOption": "RAW",
+            "includeValuesInResponse": False,
+            "data": [{
+            'range': range,
+            'majorDimension': "ROWS",
+            'values': data }]
+        }
+        return self.service.spreadsheets().values().batchUpdate(spreadsheetId=spreadsheetId,
+	    body=body).execute()
+
+
 """
     #Search for given sheet title, if doesnt exist create new sheet
     def get_resultsheet(self, testcell, title):
@@ -237,4 +268,14 @@ class GoogleSheet(object):
             self.result_sheetId = present
         return self.result_sheetId
 
+"""
+
+"""
+S = GoogleSheet("1hBBDQCCcI9HWoJeVWeMlKKxMjzCmOCOMd84f55snuXE", ["Sheet1"], "Sheet1")
+results = S.get_batch_data("1hBBDQCCcI9HWoJeVWeMlKKxMjzCmOCOMd84f55snuXE", ["D6:M7"])
+data = results["valueRanges"][0]["values"]
+print(data)
+mydata=[{"range":"C6:L7", "values":data, "majorDimension": "ROWS"}]
+mybody = { "valueInputOption":"RAW", "includeValuesInResponse": False, "data":mydata}
+S.update_batch_data("1hBBDQCCcI9HWoJeVWeMlKKxMjzCmOCOMd84f55snuXE", "B9:K10", data)
 """
