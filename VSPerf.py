@@ -7,20 +7,19 @@ import argparse
 import json
 import os
 import sys
-from datetime import date
+import datetime
 from GoogleSheet import GoogleSheet
 from GoogleDrive import GoogleDrive
 
 class VSPerfReport(object):
     def __init__(self, args):
         self.testsheet =  str(args.sheet[0])
-        #self.testsheet = tsheet
         self.template = "1GNY1zcS-oRM7m5zOK-TUewX_0WjWb529DHTUVuxfPLg"
         self.titles = ['Perf']
         self.gsheet = GoogleSheet(self.template, self.titles, "Nightly Test Report")
 
-        self.date = date.today().isoformat()
-        self.sheet_link = 'https://docs.google.com/spreadsheets/d/' + self.template
+        self.date = [datetime.datetime.now().strftime('%Y-%m-%d')]
+        self.sheet_link = ['https://docs.google.com/spreadsheets/d/' + self.template]
 
         self.data_64 = []
         self.data_1500 = []
@@ -42,8 +41,7 @@ class VSPerfReport(object):
         self.gsheet.update_columns(self.template, self.date , "Perf!C1")
         self.gsheet.update_batch_data_col(self.template, "Perf!C3:C5", self.data_64)
         self.gsheet.update_batch_data_col(self.template, "Perf!C8:C10", self.data_1500)
-        self.gsheet.update_columns(self.template, self.sheet_link, "Perf!C12")
-
+        self.gsheet.update_columns_raw(self.template, self.sheet_link, "Perf!C12")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='OVS OFFLOAD Results to Google sheets')
