@@ -11,7 +11,7 @@ from GoogleDrive import GoogleDrive
 
 
 class GoogleSheet(object):
-    def __init__(self, template_id, titles, title, folder=''):
+    def __init__(self, template_id='', titles='', title='', folder=''):
         self.template_id = template_id
         self.titles = titles
         self.folder = folder
@@ -73,6 +73,16 @@ class GoogleSheet(object):
 
         for sheet in spreadsheet.get("sheets", None):
             sheets.append(sheet['properties']['sheetId'])
+
+        return sheets
+
+    # Returns Titles of all sheets in a Spreadsheet
+    def get_sheet_titles(self, id):
+        sheets = []
+        spreadsheet = self.get_spreadsheet(id)
+
+        for sheet in spreadsheet.get("sheets", None):
+            sheets.append(sheet['properties']['title'])
 
         return sheets
 
