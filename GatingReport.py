@@ -332,8 +332,6 @@ class GatingReport(object):
         else:
             return ""
 
-i40e ixgbe qede bnxt
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Gating test results to Google sheets')
     parser.add_argument('--sheet', nargs=1, type=str, help='Test Result Sheet', required=True)
