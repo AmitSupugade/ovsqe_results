@@ -29,6 +29,7 @@ class GatingReport(object):
         print("Title of Report sheet- ", template_title)
         template_link = self.gsheet.get_sheet_link(self.template)
         print("Link of Report sheet- ", template_link)
+        print("Updating..")
 
         self.update_current()
         self.update_no_vlan()
@@ -271,66 +272,67 @@ class GatingReport(object):
         elif self.nic == "i40e":
             if rhel == "7":
                 if ovs_version == "11":
-                    return ""
+                    return "1bgKXPNhyixU2hjXJv9TGjEB-srDUKOaLuq7otiuy9k4"
                 elif ovs_version == "12":
-                    return ""
+                    return "11-K0OolhQ8iJ3QDfRbpfb0ZuCLLVUZOct13asqt3Bhg"
                 elif ovs_version == "13":
-                    return ""
+                    return "1sk6DgnZayXNnooPz_2KrbdmJs37HjgZlzBdIcaxCqqg"
             elif rhel == "8":
                 if ovs_version == "11":
-                    return ""
+                    return "1EhjpkUQjOEjZSCg8PRZsvXqU5wnWS-z5zZv5nnQeRGY"
                 elif ovs_version == "12":
-                    return ""
+                    return "1p7b0VwBnYuq3vD5cqv3ECX50LT1RVNRdJeVCqxsRxMI"
                 elif ovs_version == "13":
-                    return ""
+                    return "1v4yyllCnO1a_YDvoimiqBn_rpA7YFj0K50dORbUEDGI"
         elif self.nic == "ixgbe":
             if rhel == "7":
                 if ovs_version == "11":
-                    return ""
+                    return "1lLXnLeoczUwvhyOBKTwAdlRCqytQPUkFH4kvXHuSQRg"
                 elif ovs_version == "12":
-                    return ""
+                    return "12_ocPoB2pVDk4RqSfn45XhnSqONO947e9_ebMvf3Jjw"
                 elif ovs_version == "13":
-                    return ""
+                    return "1XrF4xZM8fKVLSg-YeGDN8Ffes-jiaBh_X3g3Yj_hIEg"
             elif rhel == "8":
                 if ovs_version == "11":
-                    return ""
+                    return "1Cr1yVGWkWrlnnitrdKWFp733yd-9X_tshHwe8ngTqzI"
                 elif ovs_version == "12":
-                    return ""
+                    return "1SwyoXmNMQQJU7iFHCL76dKlugcm7W1SFRXNyesBvJ04"
                 elif ovs_version == "13":
-                    return ""
+                    return "17-c3GM6JtZrc95n-c_o1xyuiE5hiqZ3d4XOVVAvJwb0"
         elif self.nic == "qede":
             if rhel == "7":
                 if ovs_version == "11":
-                    return ""
+                    return "12h8eivgF5FKc-lyDV_BUqJ-4i64zyn0_EbyBhlT4bao"
                 elif ovs_version == "12":
-                    return ""
+                    return "1pX_77QF9hmuTuklPG9NP8UJvSCwAO15gOr9aAliOzNY"
                 elif ovs_version == "13":
-                    return ""
+                    return "1qIUbgd4kQG4DLIMCJhrMeBzeJzsXki_DKrdej5eTBf0"
             elif rhel == "8":
                 if ovs_version == "11":
-                    return ""
+                    return "1KdkO3jd5ZiGrw7eo2kCr5vpDVjGdMX5R1HJ8KBrNrNU"
                 elif ovs_version == "12":
-                    return ""
+                    return "1PakwVpVModB8sjrisqv05hormRN2O3HvDoyRcVc7UPM"
                 elif ovs_version == "13":
-                    return ""
-        elif self.nic == "bnxt_en":
+                    return "1wabMdUwaxN17gCRNmaW468_uo41LJrIP4qqhfJN2WE0"
+        elif self.nic == "bnxt":
             if rhel == "7":
                 if ovs_version == "11":
-                    return ""
+                    return "1BmnGiylKTVhkdv0Z16AADq73QINv1VgWBbJCLlUZ6jE"
                 elif ovs_version == "12":
-                    return ""
+                    return "1LrUDXt9T0JI1as4j9BfBn6hMaOYg0T8esP-dItUAHbQ"
                 elif ovs_version == "13":
-                    return ""
+                    return "1mv37cIRNNqBS9B8hGstsFsYIC9HPpvdgbAnfvE-p03Q"
             elif rhel == "8":
                 if ovs_version == "11":
-                    return ""
+                    return "1jyEMH24vC4-UTFcZ0Jz56iZpK-EGeLHKkUJsN60uMXs"
                 elif ovs_version == "12":
-                    return ""
+                    return "1X8ogGestAhpi3SQx5dehdXqmNH4mKyXG_qls97xWgmQ"
                 elif ovs_version == "13":
-                    return ""
+                    return "1UI3HyudBizNIaMBUEGa2XMQnZKn9EUOPOO4ZFR3asmo"
         else:
             return ""
 
+i40e ixgbe qede bnxt
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Gating test results to Google sheets')
