@@ -16,10 +16,10 @@ class MemoryLeak(object):
     def __init__(self, args):
         self.resultsheetName = str(args.name[0])
 
-        self.template = "18XIVzlMeffUsw_ai4BfWlNsfhKVJ4_Tp9hvMKHAhjek"
-        self.titles = ['64B 1K Flows', '256B 5K Flows', '512B 10K Flows', '1500B 25K Flows', '2000B 100K Flowss', '9000B 1M Flows']
+        self.template = "1GH8_N4zmQ1WNdJOUcIYaQOKUOv8kNw8HzP2vXg_aw18"
+        self.titles = ['Kernel 64B 1K Flows', 'Kernel 256B 5K Flows', 'Kernel 512B 10K Flows', 'Kernel 1500B 25K Flows', 'Kernel 2000B 100K Flows', 'Kernel 9000B 1M Flows', 'DPDK 64B 1K Flows', 'DPDK 256B 5K Flows', 'DPDK 512B 10K Flows', 'DPDK 1500B 25K Flows', 'DPDK 2000B 100K Flowss', 'DPDK 9000B 1M Flows']
         self.folder = "1z97pwJ03gWCwKbsZdxBGLybvvpEy4CGa"
-        self.files = ['memory_pvp_kernel_64bytes_1kflows.txt', 'memory_pvp_kernel_256bytes_5kflows.txt', 'memory_pvp_kernel_512bytes_10kflows.txt', 'memory_pvp_kernel_1500bytes_25kflows.txt', 'memory_pvp_kernel_2000bytes_100kflows.txt', 'memory_pvp_kernel_9000bytes_1mflows.txt']
+        self.files = ['memory_pvp_kernel_64bytes_1kflows.txt', 'memory_pvp_kernel_256bytes_5kflows.txt', 'memory_pvp_kernel_512bytes_10kflows.txt', 'memory_pvp_kernel_1500bytes_25kflows.txt', 'memory_pvp_kernel_2000bytes_100kflows.txt', 'memory_pvp_kernel_9000bytes_1mflows.txt', 'memory_pvp_dpdk_64bytes_1kflows.txt', 'memory_pvp_dpdk_256bytes_5kflows.txt', 'memory_pvp_dpdk_512bytes_10kflows.txt', 'memory_pvp_dpdk_1500bytes_25kflows.txt', 'memory_pvp_dpdk_2000bytes_100kflows.txt', 'memory_pvp_dpdk_9000bytes_1mflows.txt']
 
         self.gsheet = GoogleSheet(self.template, self.titles, self.resultsheetName, self.folder)
         self.resultsheetId = self.gsheet.get_resultsheet("A3", self.resultsheetName)
@@ -28,14 +28,15 @@ class MemoryLeak(object):
         self.kb_lost = []
         self.percentage_lost = []
 
-
         for i in range(len(self.files)):
-            filename = self.files[i]
-            title = self.titles[i]
-            self.readTxt(filename)
-            self.update_resultsheet(title)
-            print("Updated from file: ", filename)
-            
+            filename = "/mnt/tests/kernel/networking/openvswitch/memory_leak_soak/" + self.files[i]
+            if os.path.isfile(filename):
+                title = self.titles[i]
+                self.readTxt(filename)
+                self.update_resultsheet(title)
+                print("Updated from file: ", filename)
+            else:
+                print(filename + " does not exist.")
         print("Done")
         print("Report Sheet Link- https://docs.google.com/spreadsheets/d/"+self.resultsheetId)
 
