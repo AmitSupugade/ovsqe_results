@@ -42,7 +42,7 @@ class MemoryLeak(object):
 
 
     def update_resultsheet(self, title, pid):
-        self.gsheet.update_columns(self.resultsheetId, pid, title + "!B1")
+        self.gsheet.update_columns(self.resultsheetId, [pid], title + "!B1")
         self.gsheet.update_columns(self.resultsheetId, self.kb_in_use, title + "!A6:A29")
         self.gsheet.update_columns(self.resultsheetId, self.kb_lost, title + "!B6:B29")
         self.gsheet.update_columns(self.resultsheetId, self.percentage_lost, title + "!C6:C29")
