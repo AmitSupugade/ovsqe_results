@@ -32,8 +32,8 @@ class MemoryLeak(object):
             filename = "/mnt/tests/kernel/networking/openvswitch/memory_leak_soak/" + self.files[i]
             if os.path.isfile(filename):
                 title = self.titles[i]
-                self.readTxt(filename)
-                self.update_resultsheet(title)
+                pid = self.readTxt(filename)
+                self.update_resultsheet(title, pid)
                 print("Updated from file: ", filename)
             else:
                 print(filename + " does not exist.")
@@ -41,7 +41,8 @@ class MemoryLeak(object):
         print("Report Sheet Link- https://docs.google.com/spreadsheets/d/"+self.resultsheetId)
 
 
-    def update_resultsheet(self, title):
+    def update_resultsheet(self, title, pid):
+        self.gsheet.update_columns(self.resultsheetId, pid, title + "!B1")
         self.gsheet.update_columns(self.resultsheetId, self.kb_in_use, title + "!A6:A29")
         self.gsheet.update_columns(self.resultsheetId, self.kb_lost, title + "!B6:B29")
         self.gsheet.update_columns(self.resultsheetId, self.percentage_lost, title + "!C6:C29")
@@ -58,11 +59,12 @@ class MemoryLeak(object):
             kb_in_use.append(line_data[5])
             kb_lost.append(line_data[7])
             percentage_lost.append(line_data[9])
+        pid = line_data[1]
 
         self.kb_in_use = kb_in_use[2:]
         self.kb_lost = kb_lost[2:]
         self.percentage_lost = percentage_lost[2:]
-
+        return pid
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Memory Leak test results to Google sheets')
