@@ -14,20 +14,22 @@ class VxlanOffload(object):
     def __init__(self, args):
         self.ovs = str(args.ovs[0])
         self.data = str(args.data[0])
+        print(self.ovs, self.data)
         self.template = "1pI_ewDbLbriKqXORkaalCmgsxZpm1lJWRv3g92Wltx4"
-        self.title = 'VxLAN Offload'
+        self.titles = ['VxLAN Offload']
         self.gsheet = GoogleSheet(self.template, self.titles, "VxLAN Offload Test Report")
         self.current_update()
         self.upload_data()
+        print("Data Uploaded Successfully.")
 
     def upload_data(self):
-        cell = self.title + "!L3"
+        cell = self.titles[0] + "!L3"
         self.gsheet.update_columns(self.template, [self.data], cell)
 
     def current_update(self):
-        origin = self.title + "!D3:L5"
-        dest = self.title + "!C3:K5"
-        ovs_cell = self.title + "!L5"
+        origin = self.titles[0] + "!D3:L5"
+        dest = self.titles[0] + "!C3:K5"
+        ovs_cell = self.titles[0] + "!L5"
         current_data = self.gsheet.get_batch_data(self.template, origin)
         self.gsheet.update_batch_data_row(self.template, dest, current_data["valueRanges"][0]["values"])
         self.gsheet.update_columns(self.template, [self.ovs], ovs_cell)
